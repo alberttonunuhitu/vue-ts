@@ -1,12 +1,42 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Home</router-link>
+      |
+      <div v-if="isLoggedIn">
+        <p>{{ displayName }}</p>
+        |
+        <a href="javascript:void(0)" @click="signOut">Keluar</a>
+      </div>
+      <div v-else>
+        <router-link to="/daftar">Daftar</router-link>
+        |
+        <router-link to="/login">Login</router-link>
+      </div>
     </div>
     <router-view />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import firebase from "@/firebase";
+
+@Component
+export default class App extends Vue {
+  get isLoggedIn(): boolean {
+    return this.$store.getters["user/isLoggedIn"];
+  }
+
+  get displayName(): string {
+    return this.$store.getters["user/displayName"];
+  }
+
+  async signOut() {
+    await firebase.auth().signOut();
+  }
+}
+</script>
 
 <style>
 #app {
