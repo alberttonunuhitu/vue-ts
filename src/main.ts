@@ -7,13 +7,11 @@ import firebase from "./firebase";
 
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    store.commit("user/setLoggedIn", true);
-    store.commit("user/setUser", user);
-    console.log("Login");
+    store.commit(`user/SET_LOGGED_IN`, true);
+    store.commit(`user/SET_USER`, user);
   } else {
-    store.commit("user/setLoggedIn", false);
-    store.commit("user/setUser", null);
-    console.log("Logout");
+    store.commit(`user/SET_LOGGED_IN`, false);
+    store.commit(`user/SET_USER`, null);
   }
 });
 
