@@ -2,7 +2,12 @@ import { GetterTree } from "vuex";
 import { UserState } from "./types";
 import { RootState } from "../types";
 
-export const getters: GetterTree<UserState, RootState> = {
+export type Getters = {
+  isLoggedIn(state: UserState): boolean;
+  displayName(state: UserState): string;
+};
+
+export const getters: GetterTree<UserState, RootState> & Getters = {
   displayName(state): string {
     const user = state.data;
 

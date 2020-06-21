@@ -15,16 +15,9 @@ import firebase from "@/firebase";
 
 @Component
 export default class Login extends Vue {
-  private email: string;
-  private password: string;
-  private loading: boolean;
-
-  constructor() {
-    super();
-    this.email = "";
-    this.password = "";
-    this.loading = false;
-  }
+  private email = "";
+  private password = "";
+  private loading = false;
 
   private login(): void {
     this.loading = true;
@@ -40,19 +33,18 @@ export default class Login extends Vue {
         let errorMessage: string;
 
         switch (errorCode) {
-          case "auth/email-already-in-use":
-            errorMessage =
-              "Thrown if there already exists an account with the given email address.";
-            break;
           case "auth/invalid-email":
-            errorMessage = "Thrown if the email address is not valid.";
+            errorMessage = "Alamat email tidak valid.";
             break;
-          case "auth/operation-not-allowed":
+          case "auth/user-disabled":
             errorMessage =
-              "Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.";
+              "Akun anda telah di nonaktifkan. Silahkan menghubunggi admin untuk info lebih lanjut.";
             break;
-          case "auth/weak-password":
-            errorMessage = "Thrown if the password is not strong enough.";
+          case "auth/user-not-found":
+            errorMessage = "Alamat email tidak terdaftar.";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Alamat email atau kata sandi anda salah.";
             break;
           default:
             errorMessage = error.message;

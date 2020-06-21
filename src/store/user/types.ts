@@ -1,11 +1,13 @@
-import firebase from 'firebase';
+import { User } from "firebase/app";
 
-export const SET_LOGGED_IN = 'setLoggedIn';
-export const SET_USER = 'setUser';
-
-export type User = firebase.User;
+export enum MutationTypes {
+  SET_LOGGED_IN = "SET_LOGGED_IN",
+  SET_USER = "SET_USER"
+}
 
 export interface UserState {
   loggedIn: boolean;
   data: User | null;
-};
+}
+
+export { User };
