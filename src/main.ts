@@ -4,6 +4,28 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import firebase from "./firebase";
+import {
+  BButton,
+  BCard,
+  BCol,
+  BContainer,
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BRow
+} from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+
+Vue.component("b-button", BButton);
+Vue.component("b-card", BCard);
+Vue.component("b-col", BCol);
+Vue.component("b-container", BContainer);
+Vue.component("b-form", BForm);
+Vue.component("b-form-group", BFormGroup);
+Vue.component("b-form-input", BFormInput);
+
+Vue.component("b-row", BRow);
 
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
