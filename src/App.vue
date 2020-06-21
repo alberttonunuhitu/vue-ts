@@ -1,62 +1,48 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      |
-      <div v-if="isLoggedIn">
-        <p>{{ displayName }}</p>
-        |
-        <a href="javascript:void(0)" @click="signOut">Keluar</a>
-      </div>
-      <div v-else>
-        <router-link to="/daftar">Daftar</router-link>
-        |
-        <router-link to="/login">Login</router-link>
-      </div>
-    </div>
-    <router-view />
+    <Header />
+
+    <b-container fluid>
+      <router-view />
+    </b-container>
+
+    <b-overlay :show="isloading" v-model="opacity" :blur="blur" no-wrap>
+      <template v-slot:overlay>
+        <div class="text-center">
+          <b-spinner style="width: 3rem; height: 3rem;" />
+          <p class="mt-3">Loading...</p>
+        </div>
+      </template>
+    </b-overlay>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import firebase from "@/firebase";
+import { BOverlay, BSpinner } from "bootstrap-vue";
+import { Header } from "@/components";
 
-@Component
+@Component({
+  components: {
+    Header,
+    BOverlay,
+    BSpinner
+  }
+})
 export default class App extends Vue {
-  get isLoggedIn(): boolean {
-    return this.$store.getters["user/isLoggedIn"];
-  }
+  private opacity = 0.8;
+  private blur = "";
 
-  get displayName(): string {
-    return this.$store.getters["user/displayName"];
-  }
-
-  async signOut() {
-    await firebase.auth().signOut();
+  get isloading() {
+    return this.$store.state.loading;
   }
 }
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap");
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  font-family: "Source Sans Pro", sans-serif;
 }
 </style>

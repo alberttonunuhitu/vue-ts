@@ -1,12 +1,43 @@
 <template>
-  <div>
-    <p v-if="loading">Loading...</p>
-    <div v-else>
-      <input type="email" placeholder="Email" v-model="email" />
-      <input type="password" placeholder="Kata Sandi" v-model="password" />
-      <button type="button" @click="login">Masuk</button>
-    </div>
-  </div>
+  <b-row class="justify-content-md-center mt-5">
+    <b-col cols="12" md="4">
+      <b-card bg-variant="light" text-variant="dark">
+        <h4 class="text-center">Masuk ke akun kamu</h4>
+        <hr />
+        <b-form>
+          <b-form-group>
+            <b-form-input
+              type="email"
+              placeholder="Masukan alamat email"
+              v-model="email"
+              required
+            />
+          </b-form-group>
+
+          <b-form-group>
+            <b-form-input
+              type="password"
+              placeholder="Masukkan kata sandi"
+              v-model="password"
+              required
+            />
+          </b-form-group>
+
+          <b-row v-show="isError" class="my-2 text-danger">
+            <b-col>
+              <small>
+                {{ errorMessage }}
+              </small>
+            </b-col>
+          </b-row>
+
+          <b-button type="button" variant="primary" block @click="login">
+            Masuk
+          </b-button>
+        </b-form>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -17,15 +48,19 @@ import firebase from "@/firebase";
 export default class Login extends Vue {
   private email = "";
   private password = "";
-  private loading = false;
+  private isError = false;
+  private errorMessage = "";
 
   private login(): void {
-    this.loading = true;
+    this.$store.commit("SET_LOADING", true);
+
     firebase
       .auth()
       .signInWithEmailAndPassword(this.email, this.password)
       .then(() => {
-        this.loading = false;
+        this.isError = false;
+        this.errorMessage = "";
+        this.$store.commit("SET_LOADING", false);
         this.$router.replace({ name: "Home" });
       })
       .catch(error => {
@@ -50,8 +85,9 @@ export default class Login extends Vue {
             errorMessage = error.message;
         }
 
-        this.loading = false;
-        alert(errorMessage);
+        this.$store.commit("SET_LOADING", false);
+        this.isError = true;
+        this.errorMessage = errorMessage;
       });
   }
 }
